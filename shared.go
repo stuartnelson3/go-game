@@ -28,12 +28,14 @@ import (
 )
 
 var sheet struct {
-	sheet      sprite.Texture
-	balloon    sprite.SubTex
-	arm        sprite.SubTex
-	pad        sprite.SubTex
-	gopherSwim sprite.SubTex
-	gopherRun  sprite.SubTex
+	sheet  sprite.Texture
+	skull1 sprite.SubTex
+	skull2 sprite.SubTex
+	skull3 sprite.SubTex
+
+	swing1 sprite.SubTex
+	swing2 sprite.SubTex
+	swing3 sprite.SubTex
 }
 
 var (
@@ -115,9 +117,9 @@ func menuSceneInit() {
 		}
 	}
 
-	addGopher(24, 36, sheet.gopherSwim, 240)
-	addGopher(48, 18, sheet.gopherRun, 100)
-	addGopher(96, 36, sheet.gopherSwim, 160)
+	addGopher(24, 36, sheet.skull1, 240)
+	addGopher(48, 18, sheet.skull2, 100)
+	addGopher(96, 36, sheet.skull3, 160)
 
 	addText(menuScene, "Gopher Fall!", 20, geom.Point{24, 24})
 	addText(menuScene, "Tap to start", 14, geom.Point{48, 48})
@@ -203,31 +205,46 @@ func loadFont() (*truetype.Font, error) {
 }
 
 func loadSheet() error {
-	f, err := app.Open("balloon_sheet.png")
-	if err != nil {
-		return err
-	}
-	mb, err := ioutil.ReadAll(f)
-	if err != nil {
-		return err
-	}
-	m, err := png.Decode(bytes.NewReader(mb))
-	if err != nil {
-		return err
-	}
-	t, err := eng.LoadTexture(m)
+	t, err := loadTexture("skull.png")
 	if err != nil {
 		return err
 	}
 	sheet.sheet = t
 
-	sheet.arm = sprite.SubTex{t, image.Rect(0, 0, 194, 42)}
-	sheet.balloon = sprite.SubTex{t, image.Rect(0, 42, 148, 634)}
-	sheet.pad = sprite.SubTex{t, image.Rect(194, 0, 294, 286)}
-	sheet.gopherSwim = sprite.SubTex{t, image.Rect(188, 288, 294, 380)}
-	sheet.gopherRun = sprite.SubTex{t, image.Rect(194, 380, 240, 440)}
+	sheet.skull1 = sprite.SubTex{t, image.Rect(0, 0, 24, 31)}
+	sheet.skull2 = sprite.SubTex{t, image.Rect(24, 0, 48, 31)}
+	sheet.skull3 = sprite.SubTex{t, image.Rect(48, 0, 72, 31)}
 
+	t, err = loadTexture("swing_full.png")
+	if err != nil {
+		return err
+	}
+	sheet.swing1 = sprite.SubTex{t, image.Rect(0, 0, 24, 32)}
+	sheet.swing2 = sprite.SubTex{t, image.Rect(0, 0, 48, 32)}
+	sheet.swing3 = sprite.SubTex{t, image.Rect(0, 0, 72, 32)}
 	return nil
+}
+
+func loadTexture(path string) (sprite.Texture, error) {
+	f, err := app.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	mb, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, err
+	}
+	m, err := png.Decode(bytes.NewReader(mb))
+	// any reason we can't skip the read all business??
+	// m, err := png.Decode(f)
+	if err != nil {
+		return nil, err
+	}
+	t, err := eng.LoadTexture(m)
+	if err != nil {
+		return nil, err
+	}
+	return t, nil
 }
 
 func touch(e event.Touch) {

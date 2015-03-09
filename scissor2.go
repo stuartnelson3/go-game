@@ -66,7 +66,7 @@ func newScissorArm2(eng sprite.Engine) *scissorArm2 {
 		Pivot:    geom.Point{X: 6, Y: 18},
 		Size:     &geom.Point{X: 12, Y: 36},
 		Rotation: math.Pi,
-		SubTex:   sheet.pad, // TODO: get a better texture
+		SubTex:   sheet.swing1, // TODO: get a better texture
 	}
 	s.node.AppendChild(base)
 
@@ -107,7 +107,7 @@ func newScissorArm2(eng sprite.Engine) *scissorArm2 {
 			Pivot:    geom.Point{X: 18, Y: 4},
 			Size:     &geom.Point{X: 36, Y: 9},
 			Rotation: 1.2,
-			SubTex:   sheet.arm,
+			SubTex:   sheet.swing2,
 		}
 		arm.Arranger = a
 		b.AppendChild(arm)
@@ -149,7 +149,7 @@ func newScissorArm2(eng sprite.Engine) *scissorArm2 {
 			Pivot:    geom.Point{X: 18, Y: 4},
 			Size:     &geom.Point{X: 36, Y: 9},
 			Rotation: -1.2,
-			SubTex:   sheet.arm,
+			SubTex:   sheet.swing3,
 		}
 		arm.Arranger = a
 		t.AppendChild(arm)
@@ -172,7 +172,7 @@ func newScissorArm2(eng sprite.Engine) *scissorArm2 {
 		Pivot:    geom.Point{X: 6, Y: 18},
 		Size:     &geom.Point{X: 12, Y: 36},
 		Rotation: math.Pi,
-		SubTex:   sheet.pad,
+		SubTex:   sheet.swing1,
 	}
 	parent.AppendChild(p)
 
@@ -183,7 +183,7 @@ func newScissorArm2(eng sprite.Engine) *scissorArm2 {
 		Offset: geom.Point{X: 14, Y: -72 + 36/2},
 		Pivot:  geom.Point{X: 6, Y: 18},
 		Size:   &geom.Point{X: 24, Y: 72},
-		SubTex: sheet.balloon,
+		SubTex: sheet.swing1,
 	}
 	parent.AppendChild(p)
 

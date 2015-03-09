@@ -58,8 +58,8 @@ func startGame() {
 		game.gophers = append(game.gophers, gopher.Arranger.(*animation.Arrangement))
 	}
 
-	addGopher(36, sheet.gopherSwim)
-	addGopher(18, sheet.gopherRun)
+	addGopher(36, sheet.skull1)
+	addGopher(18, sheet.skull3)
 
 	b := new(sprite.Node)
 	eng.Register(b)
@@ -67,7 +67,7 @@ func startGame() {
 	game.balloon = &animation.Arrangement{
 		Pivot:  geom.Point{X: 6, Y: 72},
 		Size:   &geom.Point{X: 24, Y: 72},
-		SubTex: sheet.balloon,
+		SubTex: sheet.skull1,
 		Hidden: true,
 	}
 	b.Arranger = game.balloon
