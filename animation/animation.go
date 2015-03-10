@@ -81,11 +81,12 @@ func (a *Animation) init(root *sprite.Node) error {
 // Arrangement is a sprite Arranger that uses high-level concepts to
 // transform a sprite Node.
 type Arrangement struct {
-	Offset   geom.Point    // distance between parent and pivot
-	Pivot    geom.Point    // point on sized, unrotated node
-	Size     *geom.Point   // optional bounding rectangle for scaling
-	Rotation float32       // radians counter-clockwise
-	SubTex   sprite.SubTex // optional Node Texture
+	Offset   geom.Point      // distance between parent and pivot
+	Pivot    geom.Point      // point on sized, unrotated node
+	Size     *geom.Point     // optional bounding rectangle for scaling
+	Rotation float32         // radians counter-clockwise
+	SubTex   sprite.SubTex   // optional Node Texture
+	SubTexes []sprite.SubTex // optional Node Texture
 	Hidden   bool
 
 	T0, T1    clock.Time
@@ -109,8 +110,19 @@ func (ar *Arrangement) Arrange(e sprite.Engine, n *sprite.Node, t clock.Time) {
 		tween := fn(ar.T0, ar.T1, t)
 		ar.Transform.Transformer.Transform(&ar2, tween)
 	}
-	e.SetSubTex(n, ar2.SubTex)
+	subTex := ar2.getCurrentSubTex(t)
+	e.SetSubTex(n, subTex)
 	e.SetTransform(n, ar2.Affine())
+}
+
+func (a *Arrangement) getCurrentSubTex(t clock.Time) sprite.SubTex {
+	// find the current subtext based on the progress of sprite time
+	if len(a.SubTexes) > 0 {
+		// bucket by frames
+		// returns which frame we're currently in
+		return a.SubTexes[((int(t)<<1)%60)/(60/len(a.SubTexes))]
+	}
+	return a.SubTex
 }
 
 func (ar *Arrangement) Affine() f32.Affine {

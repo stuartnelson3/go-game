@@ -11,6 +11,7 @@ import (
 	"image/png"
 	"io/ioutil"
 	"log"
+	"math"
 	"runtime"
 	"time"
 
@@ -72,13 +73,13 @@ func menuSceneInit() {
 	menuScene = new(sprite.Node)
 	eng.Register(menuScene)
 
-	addSkull := func(offsetX, size geom.Pt, subTex sprite.SubTex, duration int) {
+	addSkull := func(offsetY, size geom.Pt, subTexes []sprite.SubTex, duration int) {
 		skull := &sprite.Node{
 			Arranger: &animation.Arrangement{
-				Offset: geom.Point{X: offsetX, Y: -size},
-				Size:   &geom.Point{size, size},
-				Pivot:  geom.Point{size / 2, size / 2},
-				SubTex: subTex,
+				Offset:   geom.Point{X: -size, Y: offsetY},
+				Size:     &geom.Point{size, size},
+				Pivot:    geom.Point{size / 2, size / 2},
+				SubTexes: subTexes,
 			},
 		}
 		eng.Register(skull)
@@ -99,7 +100,10 @@ func menuSceneInit() {
 					Next:     "reset",
 					Transforms: map[*sprite.Node]animation.Transform{
 						skull: animation.Transform{
-							Transformer: animation.Move{Y: geom.Height + size*2},
+							Transformer: animation.Move{
+								X: geom.Width + size*2,
+								Y: offsetY + geom.Pt(float32(math.Sin(float64(time.Now().Unix())))),
+							},
 						},
 					},
 				},
@@ -108,7 +112,10 @@ func menuSceneInit() {
 					Next:     "falling",
 					Transforms: map[*sprite.Node]animation.Transform{
 						skull: animation.Transform{
-							Transformer: animation.Move{Y: -geom.Height - size*2},
+							Transformer: animation.Move{
+								X: -geom.Width - size*2,
+								Y: offsetY,
+							},
 						},
 					},
 				},
@@ -116,12 +123,13 @@ func menuSceneInit() {
 		}
 	}
 
-	addSkull(24, 36, sheet.skull1, 240)
-	addSkull(48, 18, sheet.skull2, 100)
-	addSkull(96, 36, sheet.skull3, 160)
+	skulls := []sprite.SubTex{sheet.skull1, sheet.skull2, sheet.skull3}
+	addSkull(24, 36, skulls, 240)
+	addSkull(48, 18, skulls, 100)
+	addSkull(96, 36, skulls, 160)
 
-	addText(menuScene, "Gopher Fall!", 20, geom.Point{24, 24})
-	addText(menuScene, "Tap to start", 14, geom.Point{48, 48})
+	addText(menuScene, "Stuart's Game!", 20, geom.Point{24, 24})
+	addText(menuScene, "WOOOO!", 14, geom.Point{48, 48})
 }
 
 func overSceneInit() {
@@ -156,14 +164,17 @@ func gameSceneInit() {
 	gameScene = new(sprite.Node)
 	eng.Register(gameScene)
 
-	game.scissor = newScissorArm2(eng)
-	game.scissor.arrangement.Offset.Y = 2 * 72
-	gameScene.AppendChild(game.scissor.node)
+	// game.scissor = newScissorArm2(eng)
+	// game.scissor.arrangement.Offset.Y = 2 * 72
+	// gameScene.AppendChild(game.scissor.node)
 
 	n1 := new(sprite.Node)
 	eng.Register(n1)
 	n1.Arranger = &animation.Arrangement{
-		Offset: geom.Point{X: 0, Y: geom.Height - 12 - 2},
+		Offset: geom.Point{
+			X: 0,
+			Y: geom.Height - 12 - 2,
+		},
 	}
 	gameScene.AppendChild(n1)
 
