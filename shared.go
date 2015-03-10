@@ -229,13 +229,7 @@ func loadTexture(path string) (sprite.Texture, error) {
 	if err != nil {
 		return nil, err
 	}
-	mb, err := ioutil.ReadAll(f)
-	if err != nil {
-		return nil, err
-	}
-	m, err := png.Decode(bytes.NewReader(mb))
-	// any reason we can't skip the read all business??
-	// m, err := png.Decode(f)
+	m, err := png.Decode(f)
 	if err != nil {
 		return nil, err
 	}
