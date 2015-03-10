@@ -5,7 +5,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"image"
 	"image/color"
@@ -73,8 +72,8 @@ func menuSceneInit() {
 	menuScene = new(sprite.Node)
 	eng.Register(menuScene)
 
-	addGopher := func(offsetX, size geom.Pt, subTex sprite.SubTex, duration int) {
-		gopher := &sprite.Node{
+	addSkull := func(offsetX, size geom.Pt, subTex sprite.SubTex, duration int) {
+		skull := &sprite.Node{
 			Arranger: &animation.Arrangement{
 				Offset: geom.Point{X: offsetX, Y: -size},
 				Size:   &geom.Point{size, size},
@@ -82,13 +81,13 @@ func menuSceneInit() {
 				SubTex: subTex,
 			},
 		}
-		eng.Register(gopher)
-		menuScene.AppendChild(gopher)
+		eng.Register(skull)
+		menuScene.AppendChild(skull)
 
-		gopherAnim := new(sprite.Node)
-		eng.Register(gopherAnim)
-		menuScene.AppendChild(gopherAnim)
-		gopherAnim.Arranger = &animation.Animation{
+		skullAnim := new(sprite.Node)
+		eng.Register(skullAnim)
+		menuScene.AppendChild(skullAnim)
+		skullAnim.Arranger = &animation.Animation{
 			Current: "init",
 			States: map[string]animation.State{
 				"init": animation.State{
@@ -99,7 +98,7 @@ func menuSceneInit() {
 					Duration: duration,
 					Next:     "reset",
 					Transforms: map[*sprite.Node]animation.Transform{
-						gopher: animation.Transform{
+						skull: animation.Transform{
 							Transformer: animation.Move{Y: geom.Height + size*2},
 						},
 					},
@@ -108,7 +107,7 @@ func menuSceneInit() {
 					Duration: 0,
 					Next:     "falling",
 					Transforms: map[*sprite.Node]animation.Transform{
-						gopher: animation.Transform{
+						skull: animation.Transform{
 							Transformer: animation.Move{Y: -geom.Height - size*2},
 						},
 					},
@@ -117,9 +116,9 @@ func menuSceneInit() {
 		}
 	}
 
-	addGopher(24, 36, sheet.skull1, 240)
-	addGopher(48, 18, sheet.skull2, 100)
-	addGopher(96, 36, sheet.skull3, 160)
+	addSkull(24, 36, sheet.skull1, 240)
+	addSkull(48, 18, sheet.skull2, 100)
+	addSkull(96, 36, sheet.skull3, 160)
 
 	addText(menuScene, "Gopher Fall!", 20, geom.Point{24, 24})
 	addText(menuScene, "Tap to start", 14, geom.Point{48, 48})
